@@ -110,20 +110,109 @@ body {
 
 ## 🚀 배포 방법
 
-### GitHub Pages에 배포하기
+### 자동 배포 (GitHub Actions) - 추천! ⭐
+
+GitHub Actions를 이용하면 코드를 push할 때마다 **자동으로 빌드하고 배포**됩니다!
+
+#### 설정 방법
+
+1. **GitHub 저장소 설정 확인**
+   - 저장소 → Settings → Pages
+   - Source를 "Deploy from a branch"로 설정
+   - Branch를 "gh-pages"로 선택
+
+2. **아무것도 하지 마세요!** 
+   - `.github/workflows/deploy.yml` 파일이 이미 설정되어 있습니다
+   - 이제 main 브랜치에 push하기만 하면 자동으로 배포됩니다!
+
+3. **자동 배포 작동 확인**
+   - GitHub 저장소 → Actions 탭
+   - 배포 진행 상황을 실시간으로 볼 수 있습니다
+   - ✅ 완료되면 자동으로 웹사이트에 반영됩니다
+
+#### 배포 과정 (자동으로 진행됨)
+1. ✅ 코드를 main 브랜치에 push
+2. ✅ GitHub Actions가 자동 실행
+3. ✅ npm install로 의존성 설치
+4. ✅ npm run build로 React 앱 빌드
+5. ✅ build 폴더를 gh-pages 브랜치에 배포
+6. ✅ GitHub Pages에서 자동 호스팅
+
+### 수동 배포 (선택사항)
+
+자동 배포 대신 수동으로 배포하고 싶다면:
+
 1. 로컬에서 build 폴더 생성:
 ```bash
 npm run build
 ```
 
-2. GitHub Pages 설정:
-   - GitHub 저장소 → Settings → Pages
-   - Source를 "gh-pages" 브랜치로 설정
-   - 변경사항을 main 브랜치에 push
+2. 수동으로 배포하려면 추가 도구 설치:
+```bash
+npm install --save-dev gh-pages
+```
 
-3. GitHub Actions를 사용하면 자동 배포 가능
+3. package.json에 deploy 스크립트 추가 (선택):
+```json
+"scripts": {
+  "deploy": "npm run build && gh-pages -d build"
+}
+```
+
+4. 배포:
+```bash
+npm run deploy
+```
 
 ## 💡 유용한 팁
+
+### GitHub Actions 워크플로우 이해하기
+
+`.github/workflows/deploy.yml` 파일은 자동 배포를 관리합니다. 각 단계를 설명하면:
+
+```yaml
+on:
+  push:
+    branches:
+      - main  # main 브랜치에 push될 때 실행
+```
+- main 브랜치에 push될 때마다 자동 실행
+
+```yaml
+- name: Install dependencies
+  run: npm install
+```
+- 필요한 라이브러리 설치
+
+```yaml
+- name: Build React app
+  run: npm run build
+```
+- React 코드를 최적화된 형태로 변환
+
+```yaml
+- name: Deploy to GitHub Pages
+  uses: peaceiris/actions-gh-pages@v3
+  with:
+    publish_dir: ./build
+```
+- 빌드된 파일을 GitHub Pages에 배포
+
+### 배포가 안 될 때 확인사항
+
+1. **GitHub Pages 설정 확인**
+   - Settings → Pages
+   - Source가 "Deploy from a branch"인지 확인
+   - Branch가 "gh-pages"로 선택되어 있는지 확인
+
+2. **Actions 탭에서 에러 확인**
+   - Repository → Actions 탭
+   - 실패한 워크플로우를 클릭하여 에러 메시지 확인
+   - 에러가 보이면 로그를 읽고 필요시 코드 수정
+
+3. **package.json 확인**
+   - react-scripts가 설치되어 있는지 확인
+   - 오타가 없는지 확인
 
 - **CSS 수정이 반영 안 됨**: 브라우저 캐시를 지우거나 Ctrl+Shift+R로 강제새로고침
 - **이미지가 안 보임**: 이미지 경로가 정확한지 확인 (public 폴더 기준으로 `/images/` 사용)

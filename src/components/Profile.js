@@ -3,11 +3,12 @@ import React from 'react';
 function Profile() {
   // 프로필 정보 (이 부분을 수정하면 됩니다)
   const profileData = {
-    name: '당신의 이름',
-    title: '개발자',
+    name: 'Jun Yeop Kim',
+    title: 'DevSecOps Engineer',
     bio: '안녕하세요! 저는 웹 개발을 공부하고 있습니다.',
-    email: 'your.email@example.com',
+    email: 'lifeparadox470@gmail.com',
     github: 'https://github.com/dev-0eum',
+    linkedin: 'https://www.linkedin.com/in/junyeob-kim-6a6429263/',
     skills: ['React', 'JavaScript', 'HTML', 'CSS'],
     projects: [
       {
